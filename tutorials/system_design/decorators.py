@@ -3,6 +3,8 @@
 # Decorators can be stacked due to their passing in of one function, and returning another function.
 # The order in which decorators are applied affect their behaviour.
 
+## SOURCE: https://realpython.com/primer-on-python-decorators/
+
 # simple function example
 def add_one(number: int):
     return number + 1
