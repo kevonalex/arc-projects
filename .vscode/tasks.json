@@ -1,0 +1,24 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "C++: build with G++",
+			"command": "g++",
+			"args": [
+				"-std=c++20",
+				"${fileDirname}/${fileBasenameNoExtension}.cpp",
+				"-o",
+				"${fileDirname}/${fileBasenameNoExtension}.exe",
+				"-Wall",
+				"-Wextra"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": "$gcc",
+			"detail": "Compile C++ with G++ using C++20 standard"
+		}
+	]
+}
