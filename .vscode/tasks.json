@@ -3,7 +3,7 @@
 	"tasks": [
 		{
 			"type": "shell",
-			"label": "C++: build current file",
+			"label": "C++: Build current file with G++",
 			"command": "g++",
 			"args": [
 				"-std=c++20",
@@ -19,7 +19,7 @@
 		},
 		{
 			"type": "shell",
-			"label": "C++: build project directory",
+			"label": "C++: Build project directory with G++",
 			"command": "sh",
 			"args": [
 				"-c",
@@ -31,6 +31,42 @@
 			},
 			"problemMatcher": "$gcc",
 			"detail": "Compile all C++ files in the current file's directory (project-aware)"
+		},
+		{
+			"type": "cppbuild",
+			"label": "C++:Build current file with Clang++",
+			"command": "clang++",
+			"args": [
+				"-std=c++20",
+				"${file}",
+				"-o",
+				"${fileDirname}/${fileBasenameNoExtension}.exe",
+				"-Wall",
+				"-Wextra"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": "$gcc",
+			"detail": "Compile the currently open C++ file with Clang++"
+		}
+		{
+			"type": "cppbuild",
+			"label": "C++: Build project directory with Clang++",
+			"command": "clang++",
+			"args": [
+				"-std=c++20",
+				"${fileDirname}/*.cpp",
+				"-o",
+				"${fileDirname}/main"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": "$gcc",
+			"detail": "Compile all C++ files in the current file's directory (project-aware) with Clang++"
 		}
 	]
 }
