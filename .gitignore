@@ -1,3 +1,5 @@
 /arcvenv
 /datasets/
 /quant/data/
+/scratch/
+*.exe
