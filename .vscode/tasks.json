@@ -3,22 +3,34 @@
 	"tasks": [
 		{
 			"type": "shell",
-			"label": "C++: build with G++",
+			"label": "C++: build current file",
 			"command": "g++",
 			"args": [
 				"-std=c++20",
-				"${fileDirname}/${fileBasenameNoExtension}.cpp",
+				"${file}",
 				"-o",
 				"${fileDirname}/${fileBasenameNoExtension}.exe",
 				"-Wall",
 				"-Wextra"
+			],
+			"group": "build",
+			"problemMatcher": "$gcc",
+			"detail": "Compile the currently open C++ file"
+		},
+		{
+			"type": "shell",
+			"label": "C++: build project directory",
+			"command": "sh",
+			"args": [
+				"-c",
+				"cd '${fileDirname}' && g++ -std=c++20 -Wall -Wextra *.cpp -o main"
 			],
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			},
 			"problemMatcher": "$gcc",
-			"detail": "Compile C++ with G++ using C++20 standard"
+			"detail": "Compile all C++ files in the current file's directory (project-aware)"
 		}
 	]
 }
