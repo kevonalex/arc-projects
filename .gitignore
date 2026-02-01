@@ -2,4 +2,5 @@
 /datasets/
 /quant/data/
 /scratch/
+/tmp/
 *.exe
