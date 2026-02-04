@@ -3,4 +3,8 @@
 /quant/data/
 /scratch/
 /tmp/
+
+# vesture
+/simulations/vesture/application_usage/data/
+/simulations/vesture/application_usage/results/
 *.exe
