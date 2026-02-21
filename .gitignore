@@ -6,5 +6,11 @@
 
 # vesture
 /simulations/vesture/application_usage/data/
+/simulations/vesture/application_usage/training_data/
+/simulations/vesture/application_usage/test_sets/
 /simulations/vesture/application_usage/results/
+/analysis/machine_learning/neural_collaborative_filtering/checkpoints/
+/analysis/machine_learning/neural_collaborative_filtering/__pycache__/
+
+
 *.exe

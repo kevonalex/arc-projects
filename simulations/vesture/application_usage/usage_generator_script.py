@@ -26,10 +26,12 @@ USER_AESTHETICS_RANGE = (2, 5)
 ITEM_AESTHETICS_RANGE = (1, 3)
 # Bias: with this probability we pick from weighted (aesthetic overlap); else uniform.
 BIASED_SAMPLE_PROB = 0.85
-# Output directories: users/items -> data/, interactions -> results/
+# Output directories: all training CSVs -> training_data/, test interactions -> test_sets/
 OUTPUT_DIR = Path(__file__).resolve().parent
-DATA_DIR = OUTPUT_DIR / "data"
-RESULTS_DIR = OUTPUT_DIR / "results"
+TRAINING_DATA_DIR = OUTPUT_DIR / "training_data"
+TEST_SETS_DIR = OUTPUT_DIR / "test_sets"
+# Fraction of generated interactions to use as training (rest -> test set)
+TRAIN_INTERACTION_RATIO = 0.85
 TIMESTAMP_DAYS_AGO = 90
 
 
@@ -134,32 +136,46 @@ def main():
                 "timestamp": ts,
             })
 
-    # --- Write CSVs: users/items -> data/, interactions -> results/ ---
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    # --- Train/test split of interactions ---
+    random.shuffle(interactions)
+    n_train = max(1, int(len(interactions) * TRAIN_INTERACTION_RATIO))
+    train_interactions = interactions[:n_train]
+    test_interactions = interactions[n_train:]
+    logger.info(f"Train interactions: {len(train_interactions)}, test interactions: {len(test_interactions)}")
 
-    users_path = DATA_DIR / "users.csv"
+    # --- Write CSVs: all training data -> training_data/, test set -> test_sets/ ---
+    TRAINING_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    TEST_SETS_DIR.mkdir(parents=True, exist_ok=True)
+
+    users_path = TRAINING_DATA_DIR / "users.csv"
     with open(users_path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["user_id", "aesthetics"])
         w.writeheader()
         w.writerows(users)
     logger.info(f"Wrote {users_path} ({len(users)} rows)")
 
-    items_path = DATA_DIR / "items.csv"
+    items_path = TRAINING_DATA_DIR / "items.csv"
     with open(items_path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["item_id", "aesthetics"])
         w.writeheader()
         w.writerows(items)
     logger.info(f"Wrote {items_path} ({len(items)} rows)")
 
-    interactions_path = RESULTS_DIR / "interactions.csv"
-    with open(interactions_path, "w", newline="", encoding="utf-8") as f:
+    train_interactions_path = TRAINING_DATA_DIR / "interactions.csv"
+    with open(train_interactions_path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=["user_id", "item_id", "action", "weight", "timestamp"])
         w.writeheader()
-        w.writerows(interactions)
-    logger.info(f"Wrote {interactions_path} ({len(interactions)} rows)")
+        w.writerows(train_interactions)
+    logger.info(f"Wrote {train_interactions_path} ({len(train_interactions)} rows)")
 
-    return users_path, items_path, interactions_path
+    test_interactions_path = TEST_SETS_DIR / "interactions.csv"
+    with open(test_interactions_path, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=["user_id", "item_id", "action", "weight", "timestamp"])
+        w.writeheader()
+        w.writerows(test_interactions)
+    logger.info(f"Wrote {test_interactions_path} ({len(test_interactions)} rows)")
+
+    return users_path, items_path, train_interactions_path, test_interactions_path
 
 
 if __name__ == "__main__":
