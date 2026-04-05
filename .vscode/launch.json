@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug hello_world (tutorials/hello)",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/tutorials/hello",
+      "args": [],
+      "cwd": "${workspaceFolder}/tutorials",
+      "preLaunchTask": "build hello_world"
+    },
+    {
+      "name": "(lldb) Attach",
+      "type": "cppdbg",
+      "request": "attach",
+      "program": "${workspaceFolder}/tutorials/hello",
+      "MIMode": "lldb"
+    }
+  ]
+}
