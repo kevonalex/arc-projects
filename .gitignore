@@ -14,3 +14,7 @@
 
 
 *.exe
+*.rcgo
+*.rcgu.o
+*/debug
+tutorials/rust/introProject/target/*
