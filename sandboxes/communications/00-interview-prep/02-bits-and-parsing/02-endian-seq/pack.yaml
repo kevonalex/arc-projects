@@ -1,0 +1,10 @@
+id: bits-02-endian-seq
+title: endian seq
+phase: 0
+tier: 1
+status: not-started
+confidence: null
+est_hours: 3
+prerequisites: []
+twins: []
+verify: []

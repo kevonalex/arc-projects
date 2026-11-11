@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-test-notebooks-progress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python deps
+        run: pip install -e . jupytext nbconvert pyyaml
+
+      - name: Configure C++ (with solutions)
+        run: cmake -B build -DUSE_SOLUTIONS=ON -DENABLE_SANITIZERS=ON
+
+      - name: Build
+        run: cmake --build build -j
+
+      - name: Solution tests (exclude exercise-labelled stub suites if any remain)
+        run: ctest --test-dir build --output-on-failure -LE exercise || ctest --test-dir build --output-on-failure
+
+      - name: Execute notebooks headlessly
+        run: |
+          set -e
+          mapfile -t nbs < <(find . -name '*.ipynb' -not -path './.git/*' -not -path './templates/*')
+          if [ ${#nbs[@]} -eq 0 ]; then
+            echo "No notebooks found"
+          else
+            for nb in "${nbs[@]}"; do
+              jupyter nbconvert --to notebook --execute --inplace "$nb"
+            done
+          fi
+
+      - name: PROGRESS.md up to date
+        run: python tools/progress.py --check

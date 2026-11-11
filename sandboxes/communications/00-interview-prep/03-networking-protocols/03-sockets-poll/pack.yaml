@@ -1,0 +1,10 @@
+id: net-03-sockets-poll
+title: sockets poll
+phase: 0
+tier: 1
+status: not-started
+confidence: null
+est_hours: 3
+prerequisites: []
+twins: []
+verify: []

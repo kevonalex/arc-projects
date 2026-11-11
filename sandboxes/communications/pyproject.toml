@@ -1,0 +1,19 @@
+[project]
+name = "communications-learning"
+version = "0.1.0"
+description = "Interview prep and long-term modelling roadmap"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy",
+  "scipy",
+  "matplotlib",
+  "jupyter",
+  "pandas",
+  "statsmodels",
+  "jupytext",
+  "nbstripout",
+  "pyyaml",
+]
+
+[tool.jupytext]
+formats = "ipynb,py:percent"

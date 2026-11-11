@@ -1,0 +1,52 @@
+// Gateway control plane for the capstone PTT radio-to-IP gateway.
+// Unary: StartCall / EndCall.  Server streaming: WatchStats.  Bidirectional streaming: FloorChannel.
+syntax = "proto3";
+
+package etherstack.gateway.v1;
+
+service Gateway {
+  rpc StartCall(StartCallRequest) returns (StartCallResponse);
+  rpc EndCall(EndCallRequest) returns (EndCallResponse);
+  // Server streaming: one CallStats every interval_ms until the call ends or the client cancels / its deadline expires.
+  rpc WatchStats(WatchStatsRequest) returns (stream CallStats);
+  // Bidirectional: client sends REQUEST / RELEASE; server pushes GRANTED / QUEUED / REVOKED / TIMED_OUT / IDLE as they happen.
+  rpc FloorChannel(stream FloorMessage) returns (stream FloorMessage);
+}
+
+message StartCallRequest {
+  string call_id = 1;
+  uint32 talkgroup = 2;
+  string caller = 3;
+}
+message StartCallResponse { string message = 1; }
+message EndCallRequest { string call_id = 1; }
+message EndCallResponse {}
+message WatchStatsRequest {
+  string call_id = 1;
+  uint32 interval_ms = 2;  // 0 -> server default (1000)
+}
+message CallStats {
+  string call_id = 1;
+  uint32 packets = 2;
+  uint32 lost = 3;
+  double loss_pct = 4;
+  double ber = 5;
+  double jitter_ms = 6;
+}
+message FloorMessage {
+  enum Kind {
+    KIND_UNSPECIFIED = 0;
+    REQUEST = 1;    // client -> server
+    RELEASE = 2;    // client -> server
+    GRANTED = 3;    // server -> client
+    QUEUED = 4;
+    REVOKED = 5;
+    TIMED_OUT = 6;
+    IDLE = 7;
+    DENIED = 8;
+  }
+  Kind kind = 1;
+  string call_id = 2;
+  string user = 3;
+  uint32 priority = 4;  // 0..7, REQUEST only
+}

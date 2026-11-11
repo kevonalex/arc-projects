@@ -1,0 +1,10 @@
+id: 12-viterbi-as-hmm
+title: Viterbi as a hidden Markov model
+phase: 0
+tier: 2
+status: not-started
+confidence: null
+est_hours: 2
+prerequisites: []
+twins: []
+verify: []

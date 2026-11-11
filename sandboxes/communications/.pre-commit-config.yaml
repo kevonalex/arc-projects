@@ -1,0 +1,13 @@
+repos:
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.7.1
+    hooks:
+      - id: nbstripout
+  - repo: local
+    hooks:
+      - id: progress-check
+        name: progress.md up to date
+        entry: python tools/progress.py --check
+        language: system
+        pass_filenames: false
+        always_run: true

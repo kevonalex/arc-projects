@@ -1,0 +1,10 @@
+id: NN-topic-name
+title: Topic title
+phase: 0
+tier: 1            # 1 must master, 2 working knowledge, 3 awareness
+status: not-started  # not-started | in-progress | done | needs-review
+confidence: null     # 1–5, filled in by learner
+est_hours: 3
+prerequisites: []
+twins: []            # ids of twin pages in /twins (filename without .md)
+verify: []           # {item, location} entries marked VERIFY

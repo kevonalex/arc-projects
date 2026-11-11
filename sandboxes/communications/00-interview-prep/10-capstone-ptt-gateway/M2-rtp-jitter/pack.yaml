@@ -1,0 +1,10 @@
+id: cap-M2-rtp-jitter
+title: M2 rtp jitter
+phase: 0
+tier: 1
+status: not-started
+confidence: null
+est_hours: 3
+prerequisites: []
+twins: []
+verify: []

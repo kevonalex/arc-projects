@@ -1,0 +1,52 @@
+// CallControl: the control-plane API of a miniature LMR<->IP gateway (pack 03-net/05, capstone M4 reuses it).
+// Wire-format reference: the C++ structs in include/grpc_security.hpp mirror messages 1 and 6 by hand.
+syntax = "proto3";
+
+package etherstack.callcontrol.v1;
+
+service CallControl {
+  // 1) Unary: one request, one response.
+  rpc StartCall(StartCallRequest) returns (StartCallResponse);
+  rpc EndCall(EndCallRequest) returns (EndCallResponse);
+  // 2) Server streaming: one request, many responses until the call ends or the client cancels.
+  rpc WatchStats(WatchStatsRequest) returns (stream CallStats);
+}
+
+// The other two gRPC call shapes, for the worksheet exercise (the C++ server leaves them UNIMPLEMENTED).
+service CallExtras {
+  // 3) Client streaming: many requests, one response.
+  rpc ReportAudio(stream AudioChunk) returns (AudioSummary);
+  // 4) Bidirectional streaming: independent request and response streams (e.g. floor-control events).
+  rpc FloorChannel(stream FloorEvent) returns (stream FloorEvent);
+}
+
+message StartCallRequest {
+  string call_id = 1;
+  uint32 talkgroup = 2;
+  string caller = 3;
+}
+message StartCallResponse {
+  bool accepted = 1;
+  string reason = 2;
+}
+message EndCallRequest { string call_id = 1; }
+message EndCallResponse { bool ok = 1; }
+message WatchStatsRequest {
+  string call_id = 1;
+  uint32 interval_ms = 2;
+}
+message CallStats {
+  string call_id = 1;
+  uint32 packets = 2;
+  uint32 lost = 3;
+  double jitter_ms = 4;     // double -> wire type 1 (fixed64, little-endian)
+}
+
+message AudioChunk { bytes pcm = 1; uint32 seq = 2; }
+message AudioSummary { uint32 chunks = 1; uint64 bytes = 2; }
+message FloorEvent {
+  enum Kind { KIND_UNSPECIFIED = 0; REQUEST = 1; GRANTED = 2; DENIED = 3; RELEASE = 4; }
+  Kind kind = 1;
+  string call_id = 2;
+  string user = 3;
+}

@@ -1,0 +1,10 @@
+id: 05-jitter-as-quantile
+title: Jitter-buffer depth as a delay quantile
+phase: 0
+tier: 1
+status: not-started
+confidence: null
+est_hours: 2
+prerequisites: []
+twins: []
+verify: []
